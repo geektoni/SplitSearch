@@ -41,22 +41,21 @@ int read_line(int fd, char * buffer, int line_number) {
 // Search recursively into a file for a specific occurrence
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
-int search(int fd, int begin, int end, char * value) {
+int search(char * file, int begin, int end, char * value) {
   int middle = (begin+end)/2, status=-1;
   char * result = malloc(sizeof(char));
   if (begin == end) {
-    read_line(fd, result, begin); // Read the specific line
-    lseek(fd, 0, SEEK_SET);               // Reset the file pointer
-    if (strcmp(result,value) == 0) {      // Compare the two strings
+    int fd = open(file, O_RDONLY);
+    read_line(fd, result, begin);
+    if (strcmp(result,value) == 0) {
       printf("Value %s find at line %i\n", value, begin+1);
     }
   } else if (begin < end) {
     int pid = fork();
     if (pid==0) {
-      status = search(fd, begin, middle, value);
+      status = search(file, begin, middle, value);
     } else {
-      waitpid(pid, &status, 0);
-      status = search(fd, middle+1, end, value);
+      status = search(file, middle+1, end, value);
     }
   }
   return status;
