@@ -1,13 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
+#include "argparsing.h"
 
 int isMarker (char* arg, char* marker) {
   char* simbols [] = {"-v", "-i", "-o", "-r"};
   int res = 0;
-
 
   for (int i = 0; i < 4; i++) {
     if (strcmp(arg,simbols[i]) == 0){
@@ -19,12 +17,11 @@ int isMarker (char* arg, char* marker) {
     }
   }
 
-
   return res;
 }
 
 
-int* argParser(int argc, char **argv, int* arguments){
+int* argParser(int argc, char **argv){
 
     char help [] = "Usage ./executable -v [value_to_search]\n -i [input_file]\n (optional)\n -o [output_file]\n -r [number_occurrences]\n";
     int* result = malloc(sizeof(int)*4);
