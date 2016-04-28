@@ -24,7 +24,7 @@ int main(int argc, char * argv[]) {
   search(argv[arg[1]], 0, max, argv[arg[0]]);
 
   // This line will block this main process
-  // untill no child is left alive. This is made
+  // until no child is left alive. This is made
   // to avoid strange output situation inside
   // bash screen.
   while (wait(NULL)) {
