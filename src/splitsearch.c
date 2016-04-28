@@ -42,19 +42,15 @@ int read_line(int fd, char * buffer, int line_number) {
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
 int search(int fd, int begin, int end, char * value) {
-  int middle = (begin+end)/2, status=0;
+  int middle = (begin+end)/2, status=-1;
   char * result = malloc(sizeof(char));
   if (begin == end) {
     read_line(fd, result, begin); // Read the specific line
     lseek(fd, 0, SEEK_SET);               // Reset the file pointer
     if (strcmp(result,value) == 0) {      // Compare the two strings
       printf("Value %s find at line %i\n", value, begin+1);
-    } else {
-      status = -1;
     }
-  } else if (begin > end) {
-    status = -1;
-  } else {
+  } else if (begin < end) {
     int pid = fork();
     if (pid==0) {
       status = search(fd, begin, middle, value);
