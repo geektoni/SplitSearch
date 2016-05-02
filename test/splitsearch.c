@@ -6,6 +6,7 @@
 #include <sys/wait.h>
 #include "splitsearch.h"
 
+
 // Set a string as empty. If the string is
 // null it will return -1.
 int empty(char * s) {
@@ -46,28 +47,30 @@ int search(char * file, int begin, int end, char * value, int pfd[]) {
   char * result = malloc(sizeof(char));
 
   //Check whether is possible to continue searching for value
-  int *R;
+  int S = 0;
+  int *R = &S;
   read(pfd[0],R,sizeof(int));
+  printf("value of R before read %i\n begin: %i end: %i\n\n", *R, begin, end );
   write(pfd[1],R,sizeof(int));
-  printf("value of R %i\n", *R );
-  if (*R < 0) {
+  printf("value of R after read%i\n begin: %i end: %i\n\n", *R, begin, end );
+
+  if (*R == 0) {
     printf("Son killed. Not enough R value in pipe\n");
     status = 0;
   } else {
-    printf("can proceed \n" );
+    // printf("can proceed \n" );
     if (begin == end) {
       int fd = open(file, O_RDONLY);
       read_line(fd, result, begin);
       if (strcmp(result,value) == 0) {
-        printf("Value %s find at line %i\n", value, begin+1);
+        printf("===> Value %s find at line %i\n", value, begin+1);
         *R-=1;
         // close(pfd[0]);
-        //write(pfd[1],R,sizeof(int));
+        write(pfd[1],R,sizeof(int));
       }
     } else if (begin < end) {
       int pid = fork();
       if (pid==0) {
-        printf("Son\n");
         status = search(file, begin, middle, value, pfd);
       } else {
         status = search(file, middle+1, end, value, pfd);

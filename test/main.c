@@ -9,6 +9,9 @@
 #include "argparsing.h"
 #include <limits.h>
 
+int pf[2];
+
+
 int main(int argc, char * argv[]) {
 
   // Check if the user supplied enough
@@ -25,26 +28,17 @@ int main(int argc, char * argv[]) {
   int *R = &S;
 
   //writing pipe
-  int pf[2];
-  //reading pipe
-  // int cf[2];
   if (pipe(pf) == -1)
     {
       perror("pipe");
       exit(1);
     }
-  // if (pipe(cf) == -1)
-  //   {
-  //     perror("pipe");
-  //     exit(1);
-  //   }
-
 
   // Check if user set -r value
   if (arg[3] != -1){
     // set max values to display -r
     S = atoi(argv[arg[3]]);
-    printf("writing r value%i\n", S );
+    printf("writing r value %i\n", S );
 
     write(pf[1],R,sizeof(int));
   } else {
