@@ -36,7 +36,6 @@ int main(int argc, char * argv[]) {
 
   if (line > -1) {
     write(FIFOwrite, &line, sizeof(int));
-    printf("Value find on line %i\n", line+1);
   }
 
   // If it is the father process, then print all the pipe
@@ -46,7 +45,6 @@ int main(int argc, char * argv[]) {
       printf("%i\n", *buffer+1);
     }
     unlink("FIFO");
-    printf("%i lines scanned.\nEnd.\n", max);
   }
 
   return 0;
