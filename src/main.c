@@ -21,13 +21,18 @@ int main(int argc, char * argv[]) {
   close(file);
 
   // Perform a search for the specific value
-  int status = search(argv[arg[1]], 0, max, argv[arg[0]]);
+  int line = search(argv[arg[1]], 0, max, argv[arg[0]]);
 
   // This line will block this main process
   // until no child is left alive. This is made
   // to avoid strange output situation inside
   // bash screen.
   while (wait(NULL) > 0);
+
+  //
+  if (line > -1) {
+    printf("Value find on line %i\n", line+1);
+  }
 
   return 0;
 }
