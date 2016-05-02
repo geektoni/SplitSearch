@@ -21,17 +21,13 @@ int main(int argc, char * argv[]) {
   close(file);
 
   // Perform a search for the specific value
-  search(argv[arg[1]], 0, max, argv[arg[0]]);
+  int status = search(argv[arg[1]], 0, max, argv[arg[0]]);
 
   // This line will block this main process
   // until no child is left alive. This is made
   // to avoid strange output situation inside
   // bash screen.
-  while (wait(NULL)) {
-    if (errno == ECHILD) {
-      break;
-    }
-  }
+  while (wait(NULL) > 0);
 
   return 0;
 }

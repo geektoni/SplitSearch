@@ -48,7 +48,7 @@ int search(char * file, int begin, int end, char * value) {
     int fd = open(file, O_RDONLY);
     read_line(fd, result, begin);
     if (strcmp(result,value) == 0) {
-      printf("Value %s find at line %i\n", value, begin+1);
+      status = begin;
     }
   } else if (begin < end) {
     int pid = fork();
