@@ -62,7 +62,7 @@ int search(char * file, int begin, int end, char * value, int pfd[]) {
         printf("Value %s find at line %i\n", value, begin+1);
         *R-=1;
         // close(pfd[0]);
-        write(pfd[1],R,sizeof(int));
+        //write(pfd[1],R,sizeof(int));
       }
     } else if (begin < end) {
       int pid = fork();
