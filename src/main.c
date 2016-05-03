@@ -29,7 +29,7 @@ int main(int argc, char * argv[]) {
   // bash screen.
   while (wait(NULL) > 0);
 
-  //
+  // If we have found the value, print it
   if (line > -1) {
     printf("Value find on line %i\n", line+1);
   }
