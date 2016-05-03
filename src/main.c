@@ -20,8 +20,13 @@ int main(int argc, char * argv[]) {
   int FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
 
   // Read the entire file to estimate
-  // its number of lines
+  // its number of lines (it exit if the file
+  // doesn't exist,)
   int file = open(argv[arg[1]], O_RDONLY);
+  if (file == -1) {
+    perror(argv[arg[1]]);
+    exit(-1);
+  }
   int max = length(file);
   close(file);
 
