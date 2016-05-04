@@ -23,6 +23,16 @@ int main(int argc, char * argv[]) {
   int FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
   int FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
 
+  int pfd[2];
+  int * r = malloc(sizeof(int));
+  *r = atoi(argv[arg[3]]);
+
+  // create R fifo
+  int PIPE = pipe(pfd);
+
+  // add R value
+  write(pfd[1],r,sizeof(int));
+
   // Read the entire file to estimate
   // its number of lines (it exit if the file
   // doesn't exist,)
@@ -41,7 +51,7 @@ int main(int argc, char * argv[]) {
   setrlimit(RLIMIT_NPROC, &limits);
 
   // Perform a search for the specific value
-  int line = search(argv[arg[1]], 0, max, argv[arg[0]], atoi(argv[arg[3]]));
+  int line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
 
   // This line will block this main process
   // until no child is left alive. This is made

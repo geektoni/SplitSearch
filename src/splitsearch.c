@@ -41,8 +41,16 @@ int read_line(int fd, char * buffer, int line_number) {
 // Search recursively into a file for a specific occurrence
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
-int search(char * file, int begin, int end, char * value, int max_value) {
-  if (max_value == 0) return 0;
+int search(char * file, int begin, int end, char * value, int pfd[]) {
+  // PIPE ----
+  int * max_value = malloc(sizeof(int));
+
+  read(pfd[0],max_value,sizeof(int));
+  write(pfd[1],max_value,sizeof(int));
+
+  if (*max_value == 0) {
+    return 0;
+  }
   int middle = (begin+end)/2, status=0;
   char * result = malloc(sizeof(char));
   if (begin == end) {
@@ -50,20 +58,30 @@ int search(char * file, int begin, int end, char * value, int max_value) {
     read_line(fd, result, begin);
     if (strcmp(result,value) == 0) {
       status = begin+1;
+      read(pfd[0],max_value,sizeof(int));
+      // write pipe
+      *max_value -= 1;
+      write(pfd[1],max_value,sizeof(int));
+
     }
   } else if (begin < end) {
     int pid = fork();
     if (pid==0) {
-      status = search(file, begin, middle, value, max_value);
+      status = search(file, begin, middle, value, pfd);
     } else {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
       if (WIFEXITED(return_status)) {
         if (WEXITSTATUS(return_status) == 1) {
-          //printf("%d\n",WEXITSTATUS(return_status));
-          status = search(file, middle+1, end, value, max_value);
+          // Nothing found
+          read(pfd[0],max_value,sizeof(int));
+          write(pfd[1],max_value,sizeof(int));
+          status = search(file, middle+1, end, value, pfd);
         } else {
-          status = search(file, middle+1, end, value, max_value-1);
+          // Found a value
+          read(pfd[0],max_value,sizeof(int));
+          write(pfd[1],max_value,sizeof(int));
+          status = search(file, middle+1, end, value, pfd);
         }
       }
     }
