@@ -41,7 +41,7 @@ int main(int argc, char * argv[]) {
   setrlimit(RLIMIT_NPROC, &limits);
 
   // Perform a search for the specific value
-  int line = search(argv[arg[1]], 0, max, argv[arg[0]]);
+  int line = search(argv[arg[1]], 0, max, argv[arg[0]], atoi(argv[arg[3]]));
 
   // This line will block this main process
   // until no child is left alive. This is made
@@ -50,7 +50,7 @@ int main(int argc, char * argv[]) {
   while (wait(NULL) > 0);
 
   // If we have found the value, print it inside FIFO
-  if (line > -1) {
+  if (line > 0) {
     write(FIFOwrite, &line, sizeof(int));
   }
 
@@ -58,10 +58,11 @@ int main(int argc, char * argv[]) {
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
-      printf("%i\n", *buffer+1);
+      printf("%i\n", *buffer);
     }
     unlink("FIFO");
   }
 
+  if (line > 0) return 1;
   return 0;
 }
