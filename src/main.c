@@ -79,7 +79,6 @@ int main(int argc, char * argv[]) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
       printLines(buffer, out);
-      //printf("%i\n", *buffer);
     }
     unlink("FIFO");
     fclose(out);
