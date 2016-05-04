@@ -3,9 +3,13 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <sys/resource.h>
+#include "createoutputfile.h"
+#include "printlines.h"
 #include "splitsearch.h"
 #include "argparsing.h"
+
 #define FILE_MODE (S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH)
 
 int main(int argc, char * argv[]) {
@@ -17,6 +21,12 @@ int main(int argc, char * argv[]) {
   // Check if the user supplied enough
   // flags to run the script.
   int * arg = argParser(argc, argv);
+
+  // Check whether output file is specified
+  FILE * out = NULL;
+  if (arg[2] != -1) {
+    out = createOutputFile(argv[arg[2]]);
+  }
 
   // Generate FIFO
   int FIFO = mkfifo("FIFO", FILE_MODE);
@@ -68,9 +78,11 @@ int main(int argc, char * argv[]) {
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
-      printf("%i\n", *buffer);
+      printLines(buffer, out);
+      //printf("%i\n", *buffer);
     }
     unlink("FIFO");
+    fclose(out);
   }
 
   if (line > 0) return 0;

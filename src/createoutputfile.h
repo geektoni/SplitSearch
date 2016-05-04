@@ -1,6 +1,7 @@
 #ifndef CREATEOUTPUTFILE_H
 #define CREATEOUTPUTFILE_H
 
-  int outputFile (int arg, char **argv);
+FILE * createOutputFile (char * file_name);
+
 
 #endif
