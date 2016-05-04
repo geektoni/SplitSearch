@@ -63,6 +63,6 @@ int main(int argc, char * argv[]) {
     unlink("FIFO");
   }
 
-  if (line > 0) return 1;
-  return 0;
+  if (line > 0) return 0;
+  return 1;
 }

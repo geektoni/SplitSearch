@@ -59,8 +59,8 @@ int search(char * file, int begin, int end, char * value, int max_value) {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
       if (WIFEXITED(return_status)) {
-        //printf("%d\n",WEXITSTATUS(return_status));
         if (WEXITSTATUS(return_status) == 1) {
+          //printf("%d\n",WEXITSTATUS(return_status));
           status = search(file, middle+1, end, value, max_value);
         } else {
           status = search(file, middle+1, end, value, max_value-1);
