@@ -55,6 +55,7 @@ int search(char * file, int begin, int end, char * value) {
     if (pid==0) {
       status = search(file, begin, middle, value);
     } else {
+      waitpid(pid, NULL, 0);
       status = search(file, middle+1, end, value);
     }
   }
