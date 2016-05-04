@@ -40,28 +40,28 @@ int* argParser(int argc, char **argv){
     int i = 1;
     while (i < argc){
       if (isMarker(argv[i],simbols[0])){
-        if (!isMarker(argv[i+1],NULL)){
+        if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
           result[0] = i+1;
         } else {
           printf("Wrong arguments\n%s",help);
           exit(1);
         }
       } else if (isMarker(argv[i],simbols[1])){
-        if (!isMarker(argv[i+1],NULL)){
+        if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
           result[1] = i+1;
         } else {
           printf("Wrong arguments\n%s",help);
           exit(1);
         }
       } else if (isMarker(argv[i],simbols[2])){
-        if (!isMarker(argv[i+1],NULL)){
+        if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
           result[2] = i+1;
         } else {
           printf("Wrong arguments\n%s",help);
           exit(1);
         }
       } else if (isMarker(argv[i],simbols[3])){
-        if (!isMarker(argv[i+1],NULL)){
+        if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
           result[3] = i+1;
         } else {
           printf("Wrong arguments\n%s",help);
