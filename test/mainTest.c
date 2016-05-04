@@ -16,9 +16,9 @@ int main(int argc, char * argv[]) {
   int * arg = argParser(argc, argv);
 
   // Generate FIFO
-  int FIFO = mkfifo("FIFO", FILE_MODE);
-  int FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
-  int FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
+  int FIFO1 = mkfifo("FIFO", FILE_MODE);
+  int FIFO2 = mkfifo("FIFO", FILE_MODE);
+
 
   // Read the entire file to estimate
   // its number of lines (it exit if the file
@@ -31,34 +31,43 @@ int main(int argc, char * argv[]) {
   int max = length(file);
   close(file);
 
-  // Set the max number of process for this execution
-  struct rlimit limits;
-  getrlimit (RLIMIT_NPROC, &limits);
-  limits.rlim_cur = MAX_CHILDREN;
-  setrlimit(RLIMIT_NPROC, &limits);
-
-  // Perform a search for the specific value
-  int line = search(argv[arg[1]], 0, max, argv[arg[0]]);
-
-  // This line will block this main process
-  // until no child is left alive. This is made
-  // to avoid strange output situation inside
-  // bash screen.
-  while (wait(NULL) > 0);
-
-  // If we have found the value, print it inside FIFO
-  if (line > -1) {
-    write(FIFOwrite, &line, sizeof(int));
-  }
-
-  // If it is the father process, then print all the pipe
-  if (PID == getpid()) {
-    int * buffer = malloc(sizeof(int));
-    while (read(FIFOread, buffer, sizeof(int)) > 0) {
-      printf("%i\n", *buffer+1);
+int found = 0;
+while (found == 0){
+  int f1 = fork();
+  if (getpid() == f1){
+    //primogenito
+    int begin = 0;
+    int middle = length/2;
+    if (begin == end){
+      int result = read_line();
+      found = true;
+      write(FIFO2,result);
     }
-    unlink("FIFO");
+  } else if (getpid() == f1 && (middle2 < end)){
+    //primogenito
+    int f2 = fork();
+    wait(f2);
+    read(FIFO2);
+    if (r > 0){
+      int middle2 = length/2 +1;
+      int end = length;
+      if (middle2 == end){
+        read_line();
+        write(FIFO1,result);
+        found = true;
+      }
+    }
+  } else {
+    //padre
+    wait(f2);
+    read(fifo2);
+    print(result);
   }
+
+  }
+
+
+
 
   return 0;
 }
