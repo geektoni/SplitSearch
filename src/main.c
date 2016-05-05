@@ -34,12 +34,16 @@ int main(int argc, char * argv[]) {
   // Check whether output file is specified
   if (arg[2] != -1) {
     out = createoutputfile(argv[arg[2]]);
+    if (out == NULL) {
+      perror("Output file: ");
+      exit(1);
+    }
   }
 
   // Create R fifo
   if (pipe(pfd) == -1) {
     perror("Pipe error: ");
-    exit(-1);
+    exit(1);
   };
 
   // Read the entire file to estimate
@@ -48,7 +52,7 @@ int main(int argc, char * argv[]) {
   int file = open(argv[arg[1]], O_RDONLY);
   if (file == -1) {
     perror(argv[arg[1]]);
-    exit(-1);
+    exit(1);
   }
   max = length(file);
   close(file);
