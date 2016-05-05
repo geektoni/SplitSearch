@@ -5,7 +5,6 @@
 #include <sys/wait.h>
 #include <sys/stat.h>
 #include <sys/resource.h>
-#include "createoutputfile.h"
 #include "printlines.h"
 #include "splitsearch.h"
 #include "argparsing.h"
@@ -33,7 +32,7 @@ int main(int argc, char * argv[]) {
 
   // Check whether output file is specified
   if (arg[2] != -1) {
-    out = createoutputfile(argv[arg[2]]);
+    out = fopen(argv[arg[2]],"w");
     if (out == NULL) {
       perror("Output file: ");
       exit(1);
