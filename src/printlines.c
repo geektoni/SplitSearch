@@ -13,7 +13,6 @@ void printLines (int * buffer, FILE * out) {
   } else {
     char * buff = malloc(sizeof(char)*100);
     sprintf(buff, "%i", *buffer);
-    printf("%s\n", buff );
     fprintf(out, "%s\n", buff);
   }
 }

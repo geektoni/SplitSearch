@@ -81,7 +81,6 @@ int main(int argc, char * argv[]) {
       printLines(buffer, out);
     }
     unlink("FIFO");
-    fclose(out);
   }
 
   if (line > 0) return 0;
