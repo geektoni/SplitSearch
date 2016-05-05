@@ -25,7 +25,7 @@ int main(int argc, char * argv[]) {
   // Check whether output file is specified
   FILE * out = NULL;
   if (arg[2] != -1) {
-    out = createOutputFile(argv[arg[2]]);
+    out = createoutputfile(argv[arg[2]]);
   }
 
   // Generate FIFO

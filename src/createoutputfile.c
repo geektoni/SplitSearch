@@ -8,7 +8,7 @@
   specified by user where the program's output should be printed
 */
 
-FILE * createOutputFile (char * file_name) {
+FILE * createoutputfile (char * file_name) {
 
   FILE *out = fopen(file_name,"w");
   printf("output file created\n" );
