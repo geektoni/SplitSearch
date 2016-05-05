@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
-      printLines(buffer, out);
+      printlines(buffer, out);
     }
     unlink("FIFO");
   }

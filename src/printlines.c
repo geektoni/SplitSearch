@@ -7,7 +7,7 @@
   or in a specific file.
 */
 
-void printLines (int * buffer, FILE * out) {
+void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
     printf("%i\n", *buffer);
   } else {
