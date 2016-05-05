@@ -3,7 +3,7 @@ CFLAGS		=
 SRCDIR		= ./src
 BUILDDIR	= ./build
 OUTFILE		= ./build/splitsearch
-OBJS		= $(BUILDDIR)/main.o $(BUILDDIR)/argparsing.o $(BUILDDIR)/splitsearch.o
+OBJS		= $(BUILDDIR)/main.o $(BUILDDIR)/argparsing.o $(BUILDDIR)/splitsearch.o $(BUILDDIR)/printlines.o
 
 .PHONY: clean help
 
