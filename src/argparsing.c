@@ -6,9 +6,9 @@
 int isMarker (char* arg, char* marker) {
   char* simbols [] = {"-v", "-i", "-o", "-r"};
   int res = 0;
-
-  for (int i = 0; i < 4; i++) {
-    if (strcmp(arg,simbols[i]) == 0){
+  int j;
+  for (j = 0; j < 4; j++) {
+    if (strcmp(arg,simbols[j]) == 0){
       if (!(marker==NULL) && (strcmp(arg,marker) == 0)){
           res = 1;
       } else if (marker == NULL) {
@@ -25,8 +25,9 @@ int* argParser(int argc, char **argv){
 
     char help [] = "Usage ./executable -v [value_to_search]\n -i [input_file]\n (optional)\n -o [output_file]\n -r [number_occurrences]\n";
     int* result = malloc(sizeof(int)*4);
-    for (int i = 0; i < 4; i++) {
-      result[i] = -1;
+    int k;
+    for (k = 0; k < 4; k++) {
+      result[k] = -1;
     }
     char* simbols [] = {"-v", "-i", "-o", "-r"};
 
