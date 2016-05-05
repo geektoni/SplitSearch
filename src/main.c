@@ -36,11 +36,6 @@ int main(int argc, char * argv[]) {
     out = createoutputfile(argv[arg[2]]);
   }
 
-  // Generate FIFO
-  FIFO = mkfifo("FIFO", FILE_MODE);
-  FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
-  FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
-
   // Create R fifo
   if (pipe(pfd) == -1) {
     perror("Pipe error: ");
@@ -57,6 +52,11 @@ int main(int argc, char * argv[]) {
   }
   max = length(file);
   close(file);
+
+  // Generate FIFO
+  FIFO = mkfifo("FIFO", FILE_MODE);
+  FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
+  FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
 
   // Check whether the user has specified a maximum
   // number of output.
@@ -75,12 +75,6 @@ int main(int argc, char * argv[]) {
 
   // Perform a search for the specific value
   line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
-
-  // This line will block this main process
-  // until no child is left alive. This is made
-  // to avoid strange output situation inside
-  // bash screen.
-  while (wait(NULL) > 0);
 
   // If we have found the value, print it inside FIFO
   if (line > 0) {
