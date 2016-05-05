@@ -60,15 +60,16 @@ int read_line(int fd, char * buffer, int line_number) {
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
 int * search(char * file, int begin, int end, char * value, int pfd[]) {
+  int * status = malloc(sizeof(int)); *status = 0;
   int * max_value = malloc(sizeof(int));
   updatepipe(pfd,max_value,false,0);
 
   if (*max_value == 0) {
-    return 0;
+    free(status);
+    free(max_value);
+    return status;
   }
   int middle = (begin+end)/2;
-  int * status = malloc(sizeof(int));
-  *status = 0;
   char * result = malloc(sizeof(char));
   if (begin == end) {
     int fd = open(file, O_RDONLY);
