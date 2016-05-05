@@ -20,7 +20,7 @@ int main(int argc, char * argv[]) {
   // Some variables
   int * r = malloc(sizeof(int));  // Max number of result
   int max = 0;                    // Total lines of the input file
-  int line = 0;                   // Line where I found the value
+  int * line = NULL;              // Lines where I found the value
   int * arg = NULL;               // Parsed command line arguments
   int pfd[2];                     // Pipe where we save the r value
   int FIFO, FIFOread, FIFOwrite;  // FIFO file descriptor
@@ -80,8 +80,12 @@ int main(int argc, char * argv[]) {
   line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
 
   // If we have found the value, print it inside FIFO
-  if (line > 0) {
-    write(FIFOwrite, &line, sizeof(int));
+  if (*line > 0) {
+    int i = 0;
+    while(line[i] != NULL) {
+      write(FIFOwrite, &line[i], sizeof(int));
+      i++;
+    }
   }
 
   // If it is the father process, then print all the pipe
