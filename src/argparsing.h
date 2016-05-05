@@ -3,5 +3,6 @@
 
   int isMarker (char* arg, char* marker);
   int* argParser(int argc, char **argv);
+  void exitonerror(char * help);
 
 #endif

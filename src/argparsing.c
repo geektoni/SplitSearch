@@ -30,47 +30,49 @@ int* argParser(int argc, char **argv){
     }
     char* simbols [] = {"-v", "-i", "-o", "-r"};
 
-
     // Check whether number of arguments is suitable
     if (argc < 5 || argc > 9){
-      printf("Wrong arguments\n%s",help);
-      exit(0);
+      exitonerror(help);
     }
 
     int i = 1;
     while (i < argc){
       if (isMarker(argv[i],simbols[0])){
         if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
+          if (result[0] != -1) exitonerror(help);
           result[0] = i+1;
         } else {
-          printf("Wrong arguments\n%s",help);
-          exit(1);
+          exitonerror(help);
         }
       } else if (isMarker(argv[i],simbols[1])){
         if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
+          if (result[1] != -1) exitonerror(help);
           result[1] = i+1;
         } else {
-          printf("Wrong arguments\n%s",help);
-          exit(1);
+          exitonerror(help);
         }
       } else if (isMarker(argv[i],simbols[2])){
         if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
+          if (result[2] != -1) exitonerror(help);
           result[2] = i+1;
         } else {
-          printf("Wrong arguments\n%s",help);
-          exit(1);
+          exitonerror(help);
         }
       } else if (isMarker(argv[i],simbols[3])){
         if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
+          if (result[3] != -1) exitonerror(help);
           result[3] = i+1;
         } else {
-          printf("Wrong arguments\n%s",help);
-          exit(1);
+          exitonerror(help);
         }
       }
-
       i++;
     }
 
     return result;
+}
+
+void exitonerror(char * help) {
+  printf("Wrong arguments\n%s",help);
+  exit(1);
 }
