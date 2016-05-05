@@ -11,7 +11,6 @@
 FILE * createoutputfile (char * file_name) {
 
   FILE *out = fopen(file_name,"w");
-  printf("output file created\n" );
 
   return out;
 

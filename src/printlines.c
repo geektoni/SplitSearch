@@ -9,10 +9,11 @@
 
 void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
-    printf("%i\n", *buffer);
+    printf("\nValue fount in line: %i\n", *buffer);
   } else {
     char * buff = malloc(sizeof(char)*100);
+    // Convert int buffer to char buffer
     sprintf(buff, "%i", *buffer);
-    fprintf(out, "%s\n", buff);
+    fprintf(out, "Value found in line: %s\n", buff);
   }
 }

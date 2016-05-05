@@ -89,12 +89,14 @@ int main(int argc, char * argv[]) {
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
       printlines(buffer, out);
     }
+    printf("\nEND\n");
     unlink("FIFO");
+  } else {
+    printf("=");
   }
 
   // Free some variables
   free(r);
-
   if (line > 0) return 0;
   return 1;
 }
