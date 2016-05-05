@@ -17,6 +17,7 @@ int main(int argc, char * argv[]) {
   // Some costants
   const int PID = getpid();
   const int MAX_CHILDREN = 10000;
+  int * r = malloc(sizeof(int));
 
   // Check if the user supplied enough
   // flags to run the script.
@@ -34,14 +35,12 @@ int main(int argc, char * argv[]) {
   int FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
 
   int pfd[2];
-  int * r = malloc(sizeof(int));
-  *r = atoi(argv[arg[3]]);
 
-  // create R fifo
-  int PIPE = pipe(pfd);
-
-  // add R value
-  write(pfd[1],r,sizeof(int));
+  // Create R fifo
+  if (pipe(pfd) == -1) {
+    perror("Pipe error: ");
+    exit(-1);
+  };
 
   // Read the entire file to estimate
   // its number of lines (it exit if the file
@@ -53,6 +52,16 @@ int main(int argc, char * argv[]) {
   }
   int max = length(file);
   close(file);
+
+  // Check whether the user has specified a maximum
+  // number of output.
+  if (arg[3] == -1) {
+    *r = max;
+  } else {
+    *r = atoi(argv[arg[3]]);
+  }
+  write(pfd[1],r,sizeof(int));
+
 
   // Set the max number of process for this execution
   struct rlimit limits;
@@ -82,6 +91,9 @@ int main(int argc, char * argv[]) {
     }
     unlink("FIFO");
   }
+
+  // Free some variables
+  free(r);
 
   if (line > 0) return 0;
   return 1;
