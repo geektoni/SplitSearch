@@ -65,7 +65,6 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
   updatepipe(pfd,max_value,false,0);
 
   if (*max_value == 0) {
-    free(status);
     free(max_value);
     return status;
   }
@@ -83,6 +82,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
     if (pid==0) {
       status = search(file, begin, middle, value, pfd);
     } else if (pid==-1) {
+      printf("Linear");
       int * counter = malloc(sizeof(int));
       status = linearsearch(file, begin, end, value, counter);
       updatepipe(pfd,max_value,true,*counter);
