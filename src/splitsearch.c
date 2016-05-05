@@ -64,12 +64,7 @@ int read_line(int fd, char * buffer, int line_number) {
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
 int search(char * file, int begin, int end, char * value, int pfd[]) {
-  // PIPE ----
   int * max_value = malloc(sizeof(int));
-
-  // read(pfd[0],max_value,sizeof(int));
-  // write(pfd[1],max_value,sizeof(int));
-
   updatepipe(pfd,max_value,false,0);
 
   if (*max_value == 0) {
@@ -82,12 +77,7 @@ int search(char * file, int begin, int end, char * value, int pfd[]) {
     read_line(fd, result, begin);
     if (strcmp(result,value) == 0) {
       status = begin+1;
-      // read(pfd[0],max_value,sizeof(int));
-      // // write pipe
-      // *max_value -= 1;
-      // write(pfd[1],max_value,sizeof(int));
       updatepipe(pfd,max_value,true,1);
-
     }
   } else if (begin < end) {
     int pid = fork();
@@ -99,13 +89,10 @@ int search(char * file, int begin, int end, char * value, int pfd[]) {
       if (WIFEXITED(return_status)) {
         if (WEXITSTATUS(return_status) == 1) {
           // Nothing found
-          read(pfd[0],max_value,sizeof(int));
-          write(pfd[1],max_value,sizeof(int));
+          updatepipe(pfd,max_value,false,0);
           status = search(file, middle+1, end, value, pfd);
         } else {
           // Found a value
-          // read(pfd[0],max_value,sizeof(int));
-          // write(pfd[1],max_value,sizeof(int));
           updatepipe(pfd,max_value,false,0);
           status = search(file, middle+1, end, value, pfd);
         }
