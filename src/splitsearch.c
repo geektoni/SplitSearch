@@ -89,17 +89,8 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
     } else {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
-      if (WIFEXITED(return_status)) {
-        if (WEXITSTATUS(return_status) == 1) {
-          // Nothing found
-          updatepipe(pfd,max_value,false,0);
-          status = search(file, middle+1, end, value, pfd);
-        } else {
-          // Found a value
-          updatepipe(pfd,max_value,false,0);
-          status = search(file, middle+1, end, value, pfd);
-        }
-      }
+      updatepipe(pfd,max_value,false,0);
+      status = search(file, middle+1, end, value, pfd);
     }
   }
   return status;
