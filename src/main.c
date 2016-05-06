@@ -21,7 +21,7 @@ int main(int argc, char * argv[]) {
   int * r = malloc(sizeof(int));  // Max number of result
   int max = 0;                    // Total lines of the input file
   int * line = NULL;              // Lines where I found the value
-  int * offsets = NULL;           // Keeps offsets for every line in input file
+  int * offs = NULL;              // Keeps offsets for every line in input file
   int * arg = NULL;               // Parsed command line arguments
   int pfd[2];                     // Pipe where we save the r value
   int FIFO, FIFOread, FIFOwrite;  // FIFO file descriptor
@@ -54,7 +54,7 @@ int main(int argc, char * argv[]) {
     perror(argv[arg[1]]);
     exit(1);
   }
-  max = length(file, offsets);
+  max = length(file, offs);
   close(file);
 
   // Generate FIFO
@@ -78,7 +78,7 @@ int main(int argc, char * argv[]) {
   setrlimit(RLIMIT_NPROC, &limits);
 
   // Perform a search for the specific value
-  line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd, offsets);
+  line = search(argv[arg[1]], 0, max-1, argv[arg[0]], pfd, offs);
 
   // If we have found the value, print it inside FIFO
   if (*line > 0) {

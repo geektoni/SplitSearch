@@ -58,11 +58,16 @@ int read_line(int fd, char * buffer, int line_number) {
 
 int better_read_line (int fd, char * buffer, int line_number, int * offsets) {
   int status = 0;
-  lseek(fd, offsets[line_number-1], SEEK_SET);
-  int offset = (offsets[line_number]-offsets[line_number-1]);
+  char term = '\0';
 
-  printf("bytes of line %i = %i\n", line_number, offset);
+  lseek(fd, offsets[line_number], SEEK_SET);
+
+
+  int offset = (offsets[line_number+1]-offsets[line_number]);
+
   read(fd, buffer, sizeof(int)*offset);
+  append(&term, buffer);
+
   return status;
 }
 
@@ -70,6 +75,8 @@ int better_read_line (int fd, char * buffer, int line_number, int * offsets) {
 // of an element, given in the value argument. It will return 0
 // if we find something and -1 if not.
 int * search(char * file, int begin, int end, char * value, int pfd[], int * offsets) {
+
+  printf("begin: %i ; end: %i \n",begin,end );
   int * status = malloc(sizeof(int)); *status = 0;
   int * max_value = malloc(sizeof(int));
   updatepipe(pfd,max_value,false,0);
@@ -83,6 +90,8 @@ int * search(char * file, int begin, int end, char * value, int pfd[], int * off
   if (begin == end) {
     int fd = open(file, O_RDONLY);
     better_read_line(fd, result, begin, offsets);
+    //read_line(fd,result,begin);
+    close(fd);
     if (strcmp(result,value) == 0) {
       *status = begin+1;
       updatepipe(pfd,max_value,true,1);
@@ -99,17 +108,8 @@ int * search(char * file, int begin, int end, char * value, int pfd[], int * off
     } else {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
-      if (WIFEXITED(return_status)) {
-        if (WEXITSTATUS(return_status) == 1) {
-          // Nothing found
-          updatepipe(pfd,max_value,false,0);
-          status = search(file, middle+1, end, value, pfd, offsets);
-        } else {
-          // Found a value
-          updatepipe(pfd,max_value,false,0);
-          status = search(file, middle+1, end, value, pfd, offsets);
-        }
-      }
+      updatepipe(pfd,max_value,false,0);
+      status = search(file, middle+1, end, value, pfd, offsets);
     }
   }
   return status;
@@ -137,13 +137,11 @@ int length(int fd, int * offsets) {
   // off counts the number of bytes to get to the [i]_th line
   int off = 0;
 
-  offsets = malloc(sizeof(int));
-
   // Set offsets for first line = 0
   offsets[i] = off;
-  printf("Offset for %i line= %i\n", i, offsets[i]);
 
   int counter = 0;
+
   char * buffer = malloc(sizeof(char));
   while(read(fd, buffer, sizeof(char))) {
     if (*buffer == '\n') {
@@ -152,7 +150,6 @@ int length(int fd, int * offsets) {
         offsets = realloc(offsets,sizeof(int)*(i+1));
         // Write offset for line no_[counter] in [i] position of [offsets] array
         offsets[i] = off+1;
-        printf("Offset for %i line= %i\n",i,offsets[i]);
 
     }
     empty(buffer);
