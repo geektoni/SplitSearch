@@ -25,6 +25,7 @@ int main(int argc, char * argv[]) {
   int pfd[2];                     // Pipe where we save the r value
   int FIFO, FIFOread, FIFOwrite;  // FIFO file descriptor
   FILE * out = NULL;              // Output file
+  int exit_value = 1;             // Return value of main
 
   // Check if the user supplied enough
   // flags to run the script.
@@ -76,8 +77,12 @@ int main(int argc, char * argv[]) {
   limits.rlim_cur = MAX_CHILDREN;
   setrlimit(RLIMIT_NPROC, &limits);
 
-  // Perform a search for the specific value
+  // Perform a search for the specific value and
+  // set the exit_value for this process
   line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
+  if (line > 0) {
+    exit_value = 0;
+  }
 
   // If we have found the value, print it inside FIFO
   if (*line > 0) {
@@ -99,9 +104,9 @@ int main(int argc, char * argv[]) {
   } else {
     printf("=");
   }
-  
+
   // Free some variables
   free(r);
-  if (line > 0) return 0;
-  return 1;
+  free(line);
+  return exit_value;
 }
