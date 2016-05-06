@@ -99,7 +99,7 @@ int main(int argc, char * argv[]) {
   } else {
     printf("=");
   }
-
+  
   // Free some variables
   free(r);
   if (line > 0) return 0;
