@@ -53,6 +53,7 @@ int read_line(int fd, char * buffer, int line_number) {
     empty(tmp);
   }
   append(&term, buffer);
+  free(tmp);
   return status;
 }
 
@@ -86,6 +87,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
       int * counter = malloc(sizeof(int));
       status = linearsearch(file, begin, end, value, counter);
       updatepipe(pfd,max_value,true,*counter);
+      free(counter);
     } else {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
@@ -93,6 +95,8 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
       status = search(file, middle+1, end, value, pfd);
     }
   }
+  free(result);
+  free(max_value);
   return status;
 }
 
