@@ -78,6 +78,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
       *status = begin+1;
       updatepipe(pfd,max_value,true,1);
     }
+    close(fd);
   } else if (begin < end) {
     int pid = fork();
     if (pid==0) {

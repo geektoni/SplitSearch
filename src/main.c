@@ -13,6 +13,8 @@
 
 int main(int argc, char * argv[]) {
 
+  /**** BEGIN CONTROL AND SET SECTION ****/
+
   // Some costants
   const int PID = getpid();
   const int MAX_CHILDREN = 10000;
@@ -25,7 +27,6 @@ int main(int argc, char * argv[]) {
   int pfd[2];                     // Pipe where we save the r value
   int FIFO, FIFOread, FIFOwrite;  // FIFO file descriptor
   FILE * out = NULL;              // Output file
-  int exit_value = 1;             // Return value of main
 
   // Check if the user supplied enough
   // flags to run the script.
@@ -40,7 +41,7 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  // Create R fifo
+  // Create pipe to store the max number of result
   if (pipe(pfd) == -1) {
     perror("Pipe error: ");
     exit(1);
@@ -57,7 +58,7 @@ int main(int argc, char * argv[]) {
   max = length(file);
   close(file);
 
-  // Generate FIFO
+  // Generate FIFO to store results
   FIFO = mkfifo("FIFO", FILE_MODE);
   FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
   FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
@@ -77,23 +78,24 @@ int main(int argc, char * argv[]) {
   limits.rlim_cur = MAX_CHILDREN;
   setrlimit(RLIMIT_NPROC, &limits);
 
+  /**** END ****/
+
+  /**** BEGIN SEARCH SECTION ****/
+
   // Perform a search for the specific value and
   // set the exit_value for this process
   line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
-  if (line > 0) {
-    exit_value = 0;
-  }
 
-  // If we have found the value, print it inside FIFO
+  // If we have found the value, write it inside FIFO
   if (*line > 0) {
     int i = 0;
-    while(line[i] != NULL) {
+    while(line[i]) {
       write(FIFOwrite, &line[i], sizeof(int));
       i++;
     }
   }
 
-  // If it is the father process, then print all the pipe
+  // If it is the father process, then print all the FIFO
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
@@ -105,8 +107,10 @@ int main(int argc, char * argv[]) {
     printf("=");
   }
 
+  /**** END SEARCH SECTION ***/
+
   // Free some variables
   free(r);
   free(line);
-  return exit_value;
+  return 0;
 }
