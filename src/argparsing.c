@@ -3,6 +3,9 @@
 #include <string.h>
 #include "argparsing.h"
 
+/* Helpers */
+
+
 /*
   Returns either if arg is a marker when <marker> parameter is NULL
   or if arg is equal tu a marker specified in parameter <marker>
@@ -28,6 +31,37 @@ int isMarker (char* arg, char* marker) {
 }
 
 /*
+  Check if user's input has required default markers <-v> and <-i>
+  Returns 1 if correct otherwise returns 0.
+*/
+  int hasdefaults(int * args) {
+
+    // Defaults that must be present for prgram to work properly
+    int res = 0;
+
+    if ( (args[0] != -1 && args[1] != -1){
+        res = 1;
+    }
+
+    return res;
+  }
+
+/*
+  Prints error message with helper <help> when input from command line is not correct
+*/
+void exitonerror() {
+  // Help message for correct usage
+  char help [] = "Usage ./executable -v [value_to_search]\n -i [input_file]\n (optional)\n -o [output_file]\n -r [number_occurrences]\n";
+
+  printf("Wrong arguments\n%s",help);
+  exit(1);
+}
+
+
+/* Main Functions */
+
+
+/*
   Return <args> vector which contains position in user's input of:
   -  args[0] => input_file
   -  args[1] => value_to_find
@@ -42,6 +76,7 @@ int isMarker (char* arg, char* marker) {
   read from command line.
 
   <-v> and <-i> must be present otherwise the function prints an error.
+  "checkdefaults" verifies that at least <-v> and <-i> are specified
 */
 int* argParser(int argc, char **argv){
 
@@ -95,16 +130,9 @@ int* argParser(int argc, char **argv){
       i++;
     }
 
+    if (!hasdefaults(args)) {
+      exitonerror();
+    }
+
     return args;
-}
-
-/*
-  Prints error message with helper <help> when input from command line is not correct
-*/
-void exitonerror() {
-  // Help message for correct usage
-  char help [] = "Usage ./executable -v [value_to_search]\n -i [input_file]\n (optional)\n -o [output_file]\n -r [number_occurrences]\n";
-
-  printf("Wrong arguments\n%s",help);
-  exit(1);
 }
