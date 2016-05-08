@@ -32,10 +32,10 @@ int empty(char * s) {
   return 0;
 }
 
-// Legge una specifica linea di un file passato come
-// file descriptor
+// Read a specific line of a file given as file descriptor.
+// If it doesn't found the line it will return 1.
 int read_line(int fd, char * buffer, int line_number) {
-  int status = 0, counter=-1;
+  int status = 1, counter=-1;
 
   char * tmp = malloc(sizeof(char));
   buffer = realloc(buffer, sizeof(char));
@@ -49,6 +49,7 @@ int read_line(int fd, char * buffer, int line_number) {
       counter++;
     } else {
       append(tmp, buffer);
+      status = 0;
     }
     empty(tmp);
   }
@@ -78,12 +79,12 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
       *status = begin+1;
       updatepipe(pfd,max_value,true,1);
     }
+    close(fd);
   } else if (begin < end) {
     int pid = fork();
     if (pid==0) {
       status = search(file, begin, middle, value, pfd);
     } else if (pid==-1) {
-      printf("Linear");
       int * counter = malloc(sizeof(int));
       status = linearsearch(file, begin, end, value, counter);
       updatepipe(pfd,max_value,true,*counter);

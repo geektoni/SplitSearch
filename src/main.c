@@ -13,11 +13,13 @@
 
 int main(int argc, char * argv[]) {
 
-  // Some costants
+  /**** BEGIN CONTROL AND SET SECTION ****/
+
+  /* Some costants */
   const int PID = getpid();
   const int MAX_CHILDREN = 10000;
 
-  // Some variables
+  /* Some variables */
   int * r = malloc(sizeof(int));  // Max number of result
   int max = 0;                    // Total lines of the input file
   int * line = NULL;              // Lines where I found the value
@@ -25,13 +27,14 @@ int main(int argc, char * argv[]) {
   int pfd[2];                     // Pipe where we save the r value
   int FIFO, FIFOread, FIFOwrite;  // FIFO file descriptor
   FILE * out = NULL;              // Output file
-  int exit_value = 1;             // Return value of main
 
-  // Check if the user supplied enough
-  // flags to run the script.
+  /*
+    Check if the user supplied enough
+    flags to run the script.
+  */
   arg = argParser(argc, argv);
 
-  // Check whether output file is specified
+  /* Check whether output file is specified */
   if (arg[2] != -1) {
     out = fopen(argv[arg[2]],"w");
     if (out == NULL) {
@@ -40,15 +43,17 @@ int main(int argc, char * argv[]) {
     }
   }
 
-  // Create R fifo
+  /* Create pipe to store the max number of result */
   if (pipe(pfd) == -1) {
     perror("Pipe error: ");
     exit(1);
   };
 
-  // Read the entire file to estimate
-  // its number of lines (it exit if the file
-  // doesn't exist,)
+  /*
+    Read the entire file to estimate
+    its number of lines (it exit if the file
+    doesn't exist,)
+  */
   int file = open(argv[arg[1]], O_RDONLY);
   if (file == -1) {
     perror(argv[arg[1]]);
@@ -57,13 +62,15 @@ int main(int argc, char * argv[]) {
   max = length(file);
   close(file);
 
-  // Generate FIFO
+  /* Generate FIFO to store results */
   FIFO = mkfifo("FIFO", FILE_MODE);
   FIFOread = open("FIFO", O_RDONLY | O_NONBLOCK);
   FIFOwrite = open("FIFO",O_WRONLY | O_NONBLOCK);
 
-  // Check whether the user has specified a maximum
-  // number of output.
+  /*
+    Check whether the user has specified a maximum
+    number of output.
+  */
   if (arg[3] == -1) {
     *r = max;
   } else {
@@ -71,29 +78,32 @@ int main(int argc, char * argv[]) {
   }
   write(pfd[1],r,sizeof(int));
 
-  // Set the max number of process for this execution
+  /* Set the max number of process for this execution */
   struct rlimit limits;
   getrlimit (RLIMIT_NPROC, &limits);
   limits.rlim_cur = MAX_CHILDREN;
   setrlimit(RLIMIT_NPROC, &limits);
 
-  // Perform a search for the specific value and
-  // set the exit_value for this process
-  line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
-  if (line > 0) {
-    exit_value = 0;
-  }
+  /**** END ****/
 
-  // If we have found the value, print it inside FIFO
+  /**** BEGIN SEARCH SECTION ****/
+
+  /*
+    Perform a search for the specific value and
+    set the exit_value for this process
+  */
+  line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
+
+  /* If we have found the value, write it inside FIFO */
   if (*line > 0) {
     int i = 0;
-    while(line[i] != NULL) {
+    while(line[i]) {
       write(FIFOwrite, &line[i], sizeof(int));
       i++;
     }
   }
 
-  // If it is the father process, then print all the pipe
+  /* If it is the father process, then print all the FIFO */
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
@@ -105,8 +115,10 @@ int main(int argc, char * argv[]) {
     printf("=");
   }
 
-  // Free some variables
+  /**** END SEARCH SECTION ***/
+
+  /* Free some variables previously allocated */
   free(r);
   free(line);
-  return exit_value;
+  return 0;
 }
