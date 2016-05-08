@@ -6,7 +6,6 @@
   This function check whether the program's output has to be printet on stoutput
   or in a specific file.
 */
-
 void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
     printf("\nValue fount in line: %i\n", *buffer);
