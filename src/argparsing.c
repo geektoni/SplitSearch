@@ -19,8 +19,8 @@
 */
 int isMarker (char * arg, char * marker) {
 
-  char* simbols [] = {"-v", "-i", "-o", "-r"};    // Accepted Markers
-  int res = 0;                                    // Return result
+  char* simbols [] = {"-v", "-i", "-o", "-r", "--verbose"};    // Accepted Markers
+  int res = 0;                                                 // Return result
 
   int j;
   for (j = 0; j < 4; j++) {
@@ -68,7 +68,7 @@ int isMarker (char * arg, char * marker) {
 */
 void exitonerror() {
   // Help message for correct usage
-  char help [] = "Usage:\t./splitsearch -v value_to_search -i input_file\n \t[ -o output_file ]\n \t[ -r number_occurrences ]\n";
+  char help [] = "Usage:\t./splitsearch -v value_to_search -i input_file\n \t[ -o output_file ]\n \t[ -r number_occurrences ]\n \t[ --verbose ]\n";
 
   printf("Wrong arguments\n%s",help);
   exit(1);
@@ -105,17 +105,17 @@ void exitonerror() {
 int* argParser(int argc, char **argv){
 
     // args vector which will be returned
-    int* args = malloc(sizeof(int)*4);
+    int* args = malloc(sizeof(int)*5);
 
     int k;
-    for (k = 0; k < 4; k++) {
+    for (k = 0; k < 5; k++) {
       //Set default value for each marker
       args[k] = -1;
     }
-    char* simbols [] = {"-v", "-i", "-o", "-r"};
+    char* simbols [] = {"-v", "-i", "-o", "-r","--verbose"};
 
     // Check whether number of arguments is suitable
-    if (argc < 5 || argc > 9){
+    if (argc < 5 || argc > 10){
       exitonerror();
     }
 
@@ -147,6 +147,16 @@ int* argParser(int argc, char **argv){
         if (argv[i+1]!= NULL && !isMarker(argv[i+1],NULL)){
           if (args[3] != -1) exitonerror();
           args[3] = i+1;
+        } else {
+          exitonerror();
+        }
+      // Check for --verbose marker presence
+      } else if (isMarker(argv[i],simbols[4])){
+        // --verbose marker doesn't require an argument
+        printf("verbose found" );
+        if (argv[i+1] == NULL){
+          if (args[4] != -1) exitonerror();
+          args[4] = 1;
         } else {
           exitonerror();
         }
