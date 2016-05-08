@@ -57,7 +57,7 @@ test: compile
 	@echo ''
 	@echo '[*] Test 7: error: must have default markers to work.'
 	@echo '================================='
-	./build/splitsearch -v value
+	! ./build/splitsearch -i assets/numeric_large
 
 clean:
 	rm -Rf build/*.o $(OUTFILE)
