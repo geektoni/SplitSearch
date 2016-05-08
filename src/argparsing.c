@@ -20,7 +20,7 @@
 int isMarker (char * arg, char * marker) {
 
   char* simbols [] = {"-v", "-i", "-o", "-r", "--verbose"};    // Accepted Markers
-  int res = 0;                                    // Return result
+  int res = 0;                                                 // Return result
 
   int j;
   for (j = 0; j < 4; j++) {
@@ -153,6 +153,7 @@ int* argParser(int argc, char **argv){
       // Check for --verbose marker presence
       } else if (isMarker(argv[i],simbols[4])){
         // --verbose marker doesn't require an argument
+        printf("verbose found" );
         if (argv[i+1] == NULL){
           if (args[4] != -1) exitonerror();
           args[4] = 1;
