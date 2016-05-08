@@ -1,9 +1,10 @@
 CC		= gcc
 CFLAGS		= 
-SRCDIR		= ./src
-BUILDDIR	= ./build
-OUTFILE		= ./build/splitsearch
-OBJS		= $(BUILDDIR)/main.o $(BUILDDIR)/argparsing.o $(BUILDDIR)/splitsearch.o $(BUILDDIR)/printlines.o
+SRCDIR		= src
+BUILDDIR	= build
+OUTFILE		= build/splitsearch
+
+OBJS		= $(shell /bin/ls src/ | grep '$[\.c$]'| sed -e 's/\.c/.o/g' | sed -e 's/^/${BUILDDIR}\//')
 
 .PHONY: clean help
 
