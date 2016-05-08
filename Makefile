@@ -1,5 +1,5 @@
 CC		= gcc
-CFLAGS		= 
+CFLAGS		=
 SRCDIR		= src
 BUILDDIR	= build
 OUTFILE		= build/splitsearch
@@ -26,19 +26,16 @@ compile: $(OBJS)
 build: clean compile
 
 test: compile
-	@echo '================================='
-	@echo 'Test 1: found number'
-	@echo '================================='
+	@echo ''
+	@echo '[*] Test 1: found number'
 	./build/splitsearch -i assets/numeric_small -v 22
 
-	@echo '================================='
-	@echo 'Test 2: not found number'
-	@echo '================================='
+	@echo ''
+	@echo '[*] Test 2: not found number'
 	./build/splitsearch -i assets/numeric_small -v 1000
-	
-	@echo '================================='
-	@echo 'Test 3: found string'
-	@echo '================================='
+
+	@echo ''
+	@echo '[*] Test 3: found string'
 	#./build/splitsearch -i assets/numeric_small -v 22
 
 clean:
