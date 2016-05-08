@@ -17,16 +17,15 @@ typedef enum { false, true } bool;
   Read from pipe updated max-value. Update it, if <update> is TRUE
 
   Input:
-    - pfd : pipe file descriptor
-    - max_value : max number of results to look for
-    - update : allows update of <max_value>
-    - update_value : value used for update max_value
-  Output:
+    - pfd : pipe file descriptor.
+    - max_value : max number of results to look for.
+    - update : allows update of <max_value>.
+    - update_value : value used for update max_value.
 */
 void updatepipe (int pfd[], int * max_value, bool update, int update_value ) {
   // Read value from pipe
   read(pfd[0],max_value,sizeof(int));
-  // if update is true than decrement max_value of updadate_value
+  // if update is true than decrement max_value of update_value
   if (update) {
     * max_value -= update_value;
   }
@@ -35,28 +34,30 @@ void updatepipe (int pfd[], int * max_value, bool update, int update_value ) {
 }
 
 /*
-  Set a string as empty. If the string is null it will return -1.
+  Set a string as empty.
 
   Input:
-    - s : string to check
+    - s : string to check.
   Output:
+    1 : if the string is NULL.
+    0 : if the string is valid.
 */
 int empty(char * s) {
-  if (s==NULL) return -1;
+  if (s==NULL) return 1;
   s[0] = '\0';
   return 0;
 }
 
 /*
   Read a specific line of a file given as file descriptor.
-  If it doesn't found the line it will return 1.
 
   Input:
-    - fd : file descriptor of input file
-    - buffer : buffer to store line read from file
-    - line_number : line's number to read from file
+    - fd : file descriptor of input file.
+    - buffer : buffer to store line read from file.
+    - line_number : line's number to read from file.
   Output:
-    - status: result
+    - 0: If it found the line.
+    - 1: If it doesn't found the line.
 */
 int read_line(int fd, char * buffer, int line_number) {
   int status = 1, counter=-1;
@@ -83,23 +84,24 @@ int read_line(int fd, char * buffer, int line_number) {
 }
 
 /*
-  Append the first char of the form argument to the end
-  of the to argument.
+  Append the first char of the <from> argument to the end
+  of the <to> argument.
 
   Input:
-    - from :
-    - to :
+    - from : string to copy from.
+    - to : string that will be modified.
 
   Output:
-    -
+    - 1: if the function failed.
+    - 0: if everything went fine.
 */
 int append(char * from, char * to) {
   // It the from or the to arguments are null exit
-  if (from == NULL || to == NULL) return -1;
+  if (from == NULL || to == NULL) return 1;
   size_t len = strlen(to);
   to = realloc(to, len+1+1);
   // If the reallocation fails exit with error
-  if (to == NULL) return -1;
+  if (to == NULL) return 1;
   to[len] = from[0];
   to[len+1] = '\0';
   return 0;
@@ -112,8 +114,9 @@ int append(char * from, char * to) {
   Return the number of rows into a file (given as file descriptor)
 
   Input:
-
+    - fd: a valid file descriptor.
   Output:
+    - The number of lines of the file.
 */
 int length(int fd) {
   int counter = 0;
@@ -128,12 +131,18 @@ int length(int fd) {
 
 /*
   Search recursively into a file for a specific occurrence
-  of an element, given in the value argument. It will return 0
-  if we find something and -1 if not.
+  of an element, given in the value argument.
 
   Input:
+    - file: the name of the file that we want to examine be
+    - begin: the begin of the interval where to search in (line number).
+    - end: the end of the interval where to search in (line number).
+    - value: the value that we want to find.
+    - pfd[]: the pipe were we will write how many occurence of the value
+      we want to find.
 
   Output:
+    - The number of the line where we have found the value.
 
 */
 int * search(char * file, int begin, int end, char * value, int pfd[]) {
@@ -178,12 +187,20 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
 }
 
 /*
-  When max fork number is reached and "splitsearch" is not yet finished thi function
+  When max fork number is reached and "splitsearch" is not yet finished this function
   checks if <value> is present in <file> with a linear search.
 
   Input:
+  - file: the name of the file that we want to examine be
+  - begin: the begin of the interval where to search in (line number).
+  - end: the end of the interval where to search in (line number).
+  - value: the value that we want to find.
+  - pfd[]: the pipe were we will write how many occurence of the value
+    we want to find.
 
   Output:
+  - An integer array that will contain the line numbers where we have found
+    the value passed as argument.
 */
 int * linearsearch(char * file, int begin, int end, char * value, int * max) {
   char * buffer = malloc(sizeof(char));
