@@ -4,6 +4,15 @@
 
 L'eseguibile permette di effettuare una ricerca all'intero di un file per trovare la posizione di un determinato valore, passato come argomento. L'algortimo agisce dividendo a metà l'insieme dei dati e iterando sulle due metà generate fino ad arrivare ad analizzare una singola linea (tramite la generazione di processi figli). Poiché ogni processo padre aspetta la terminazione dei suoi processi figli prima di continuare, il numero massimo di processi che possono venir generati è uguale a circa log(n) in base 2, dove n è il numero di righe del file di input.
 
+## Uso
+
+splitsearch -i <file_da_analizzare> -v <valore da cercare>
+
+E' possibile anche passare delle informazioni aggiuntive che possono essere:
+* -r <numero_di_risultati>: limita il numero di risultati;
+* -o <file_di_output>: specifica dove salvare i risultati;
+* --verbose: mostra a schermo informazioni sull'esecuzione;
+
 ## Makefile
 
 Abbiamo usato delle variabili per parametrizzare i parametri di compilazione:
