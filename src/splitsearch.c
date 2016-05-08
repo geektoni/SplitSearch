@@ -141,7 +141,7 @@ int length(int fd) {
     - pfd[]: the pipe were we will write how many occurence of the value
       we want to find.
     - verbose_mode: if it has value 1, the the search will be performed
-      printing out some information about the execution. 
+      printing out some information about the execution.
 
   Output:
     - The number of the line where we have found the value.
@@ -176,7 +176,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[], int verbo
       status = search(file, begin, middle, value, pfd, verbose_mode);
     } else if (pid==-1) {
       int * counter = malloc(sizeof(int));
-      status = linearsearch(file, begin, end, value, counter);
+      status = linearsearch(file, begin, end, value, counter, max_value);
       updatepipe(pfd,max_value,true,*counter);
       free(counter);
     } else {
@@ -200,28 +200,30 @@ int * search(char * file, int begin, int end, char * value, int pfd[], int verbo
   - begin: the begin of the interval where to search in (line number).
   - end: the end of the interval where to search in (line number).
   - value: the value that we want to find.
-  - pfd[]: the pipe were we will write how many occurence of the value
-    we want to find.
+  - result_number: total result number found.
+  - max_value: max result that I can find.
 
   Output:
   - An integer array that will contain the line numbers where we have found
     the value passed as argument.
 */
-int * linearsearch(char * file, int begin, int end, char * value, int * max) {
+int * linearsearch(char * file, int begin, int end, char * value, int * result_number, int * max_value) {
   char * buffer = malloc(sizeof(char));
   int counter = 0;
   int * status = malloc(sizeof(int));
   *status = 0;
-  int fd = open(file, O_RDONLY);
-  while (begin <= end) {
+  while (begin <= end && counter < max_value[0]) {
+    int fd = open(file, O_RDONLY);
     read_line(fd, buffer, begin);
     if (strcmp(buffer, value) == 0) {
-      status = realloc(status, sizeof(int)*counter+1);
-      status[counter] = begin+1;
-      counter++; begin++;
-    }
+       status = realloc(status, sizeof(int)*counter+1);
+       status[counter] = begin+1;
+       counter++;
+     }
+     begin++;
+     close(fd);
   }
-  *max = counter;
+  *result_number = counter;
   free(buffer);
   return status;
 }

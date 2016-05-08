@@ -6,6 +6,6 @@ int length(int fd);
 int empty(char * s);
 int read_line(int fd, char * buffer, int line_number);
 int * search(char * file, int begin, int end, char * value, int pfd [], int verbose_mode);
-int * linearsearch(char * file, int begin, int end, char * value, int * max);
+int * linearsearch(char * file, int begin, int end, char * value, int * result_number, int * max_value);
 
 #endif
