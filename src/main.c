@@ -92,7 +92,7 @@ int main(int argc, char * argv[]) {
     Perform a search for the specific value and
     set the exit_value for this process
   */
-  line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd);
+  line = search(argv[arg[1]], 1, max, argv[arg[0]], pfd);
 
   /* If we have found the value, write it inside FIFO */
   if (*line > 0) {
@@ -106,9 +106,14 @@ int main(int argc, char * argv[]) {
   /* If it is the father process, then print all the FIFO */
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
+    int found = 0;
     printf("\n[*] Search ended.\n[*] Value found in line\\s:\n");
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
       printlines(buffer, out);
+      found = 1;
+    }
+    if (found == 0) {
+      printf("0 - Not found\n");
     }
     unlink("FIFO");
   } else {
