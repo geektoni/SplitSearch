@@ -52,12 +52,13 @@ test: compile
 	@echo ''
 	@echo '[*] Test 6: print max_value of values found in output_file'
 	@echo '================================='
-	./build/splitsearch -i assets/numeric_large -v 24 -r 3 -o output_test_6
+	./build/splitsearch -i assets/numeric_small -v 24 -r 3 -o output_test_6
 
 	@echo ''
 	@echo '[*] Test 7: error: must have default markers to work.'
 	@echo '================================='
-	! ./build/splitsearch -i assets/numeric_large
+	! ./build/splitsearch -i assets/numeric_small
 
 clean:
+	rm -Rf output_test_*
 	rm -Rf build/*.o $(OUTFILE)
