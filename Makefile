@@ -42,7 +42,7 @@ test: compile
 	@echo ''
 	@echo '[*] Test 4: print output_file'
 	@echo '================================='
-	./build/splitsearch -i assets/numeric_repetition_small -v 10 -o output_file1
+	./build/splitsearch -i assets/numeric_repetition_small -v 10 -o out_puttest_4
 
 	@echo ''
 	@echo '[*] Test 5: print max_value of values found'
@@ -52,12 +52,12 @@ test: compile
 	@echo ''
 	@echo '[*] Test 6: print max_value of values found in output_file'
 	@echo '================================='
-	./build/splitsearch -i assets/numeric_large -v 24 -r 3 -o output_file2
+	./build/splitsearch -i assets/numeric_large -v 24 -r 3 -o out_puttest_6
 
 	@echo ''
 	@echo '[*] Test 7: error: must have default markers to work.'
 	@echo '================================='
-	./build/splitsearch -i assets/numeric_large
+	./build/splitsearch -v value
 
 clean:
 	rm -Rf build/*.o $(OUTFILE)
