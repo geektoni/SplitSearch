@@ -68,7 +68,7 @@ int isMarker (char * arg, char * marker) {
 */
 void exitonerror() {
   // Help message for correct usage
-  char help [] = "Usage:\t./[executable] -v [value_to_search] -i [input_file]\n(optional)\n \t-o [output_file]\n \t-r [number_occurrences]\n";
+  char help [] = "Usage:\t./splitsearch -v value_to_search -i input_file\n \t[ -o output_file ]\n \t[ -r number_occurrences ]\n";
 
   printf("Wrong arguments\n%s",help);
   exit(1);
