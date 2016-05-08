@@ -6,7 +6,7 @@ L'eseguibile permette di effettuare una ricerca all'intero di un file per trovar
 
 ## Uso
 
-splitsearch -i <file_da_analizzare> -v <valore da cercare>
+splitsearch -i `<file_da_analizzare>`  -v `<valore da cercare>`
 
 E' possibile anche passare delle informazioni aggiuntive che possono essere:
 * -r <numero_di_risultati>: limita il numero di risultati;
