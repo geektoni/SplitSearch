@@ -16,6 +16,8 @@ Abbiamo usato delle variabili per parametrizzare i parametri di compilazione:
 * _OUTFILE:_ è il path del file binario compilato
 * _OBJS:_ contiene tutti i file oggetto ricavati dalla directory src.
 
+Poi abbiamo implementato le direttive richieste dai requisiti del progetto
+
 ### Algorithm
 
 
