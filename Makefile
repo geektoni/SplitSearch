@@ -25,7 +25,7 @@ compile: $(OBJS)
 
 build: clean compile
 
-test:
+test: compile
 	@echo '================================='
 	@echo 'Test 1: found number'
 	@echo '================================='
@@ -42,4 +42,4 @@ test:
 	#./build/splitsearch -i assets/numeric_small -v 22
 
 clean:
-	rm -Rf build/*.o
+	rm -Rf build/*.o $(OUTFILE)
