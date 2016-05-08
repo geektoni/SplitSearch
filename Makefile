@@ -37,7 +37,7 @@ test: compile
 	@echo ''
 	@echo '[*] Test 3: found string'
 	@echo '================================='
-	#./build/splitsearch -i assets/string_largest -v zucchini
+	./build/splitsearch -i assets/string_large -v altipiano
 
 	@echo ''
 	@echo '[*] Test 4: print output_file'
