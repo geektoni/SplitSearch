@@ -5,6 +5,14 @@
 /*
   This function check whether the program's output has to be printet on stoutput
   or in a specific file.
+
+  Input:
+  - buffer : array with result's line number
+  - out : file in which print the output. Can be NULL
+
+  Outut:
+  - stdout : prints buffer's content
+  - out: if not NULL prints buffer's content in output file
 */
 void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
