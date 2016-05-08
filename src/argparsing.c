@@ -5,6 +5,7 @@
 
 /* Helpers */
 
+int MARKERS_NUMBER = 5;
 
 /*
   Returns either if arg is a marker when <marker> parameter is NULL
@@ -23,7 +24,7 @@ int isMarker (char * arg, char * marker) {
   int res = 0;                                                 // Return result
 
   int j;
-  for (j = 0; j < 4; j++) {
+  for (j = 0; j < MARKERS_NUMBER; j++) {
     if (strcmp(arg,simbols[j]) == 0){
       //Checks whether arg is the specified <marker>
       if (!(marker==NULL) && (strcmp(arg,marker) == 0)){
@@ -108,11 +109,12 @@ int* argParser(int argc, char **argv){
     int* args = malloc(sizeof(int)*5);
 
     int k;
-    for (k = 0; k < 5; k++) {
+    for (k = 0; k < MARKERS_NUMBER; k++) {
       //Set default value for each marker
       args[k] = -1;
     }
     char* simbols [] = {"-v", "-i", "-o", "-r","--verbose"};
+
 
     // Check whether number of arguments is suitable
     if (argc < 5 || argc > 10){
@@ -151,7 +153,7 @@ int* argParser(int argc, char **argv){
           exitonerror();
         }
       // Check for --verbose marker presence
-      } else if (isMarker(argv[i],simbols[4])){
+      } else if (isMarker(argv[i],simbols[4])) {
         // --verbose marker doesn't require an argument
         printf("verbose found" );
         if (argv[i+1] == NULL){
