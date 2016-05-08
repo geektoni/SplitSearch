@@ -16,11 +16,11 @@
 */
 void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
-    printf("Value found in line: %i\n", *buffer);
+    printf("%i\n", *buffer);
   } else {
     char * buff = malloc(sizeof(char)*100);
     // Convert int buffer to char buffer
     sprintf(buff, "%i", *buffer);
-    fprintf(out, "Value found in line: %s\n", buff);
+    fprintf(out, "%s\n", buff);
   }
 }

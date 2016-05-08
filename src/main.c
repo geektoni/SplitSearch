@@ -106,7 +106,7 @@ int main(int argc, char * argv[]) {
   /* If it is the father process, then print all the FIFO */
   if (PID == getpid()) {
     int * buffer = malloc(sizeof(int));
-    printf(" END\n");
+    printf("\n[*] Search ended.\n[*] Value found in line\\s:\n");
     while (read(FIFOread, buffer, sizeof(int)) > 0) {
       printlines(buffer, out);
     }
