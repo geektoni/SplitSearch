@@ -15,6 +15,13 @@ typedef enum { false, true } bool;
 
 /*
   Read from pipe updated max-value. Update it, if <update> is TRUE
+
+  Input:
+    - pfd : pipe file descriptor
+    - max_value : max number of results to look for
+    - update : allows update of <max_value>
+    - update_value : value used for update max_value
+  Output:
 */
 void updatepipe (int pfd[], int * max_value, bool update, int update_value ) {
   // Read value from pipe
@@ -29,6 +36,10 @@ void updatepipe (int pfd[], int * max_value, bool update, int update_value ) {
 
 /*
   Set a string as empty. If the string is null it will return -1.
+
+  Input:
+    - s : string to check
+  Output:
 */
 int empty(char * s) {
   if (s==NULL) return -1;
@@ -39,6 +50,13 @@ int empty(char * s) {
 /*
   Read a specific line of a file given as file descriptor.
   If it doesn't found the line it will return 1.
+
+  Input:
+    - fd : file descriptor of input file
+    - buffer : buffer to store line read from file
+    - line_number : line's number to read from file
+  Output:
+    - status: result
 */
 int read_line(int fd, char * buffer, int line_number) {
   int status = 1, counter=-1;
@@ -67,6 +85,13 @@ int read_line(int fd, char * buffer, int line_number) {
 /*
   Append the first char of the form argument to the end
   of the to argument.
+
+  Input:
+    - from :
+    - to :
+
+  Output:
+    -
 */
 int append(char * from, char * to) {
   // It the from or the to arguments are null exit
@@ -85,6 +110,10 @@ int append(char * from, char * to) {
 
 /*
   Return the number of rows into a file (given as file descriptor)
+
+  Input:
+
+  Output:
 */
 int length(int fd) {
   int counter = 0;
@@ -101,6 +130,11 @@ int length(int fd) {
   Search recursively into a file for a specific occurrence
   of an element, given in the value argument. It will return 0
   if we find something and -1 if not.
+
+  Input:
+
+  Output:
+
 */
 int * search(char * file, int begin, int end, char * value, int pfd[]) {
   int * status = malloc(sizeof(int)); *status = 0;
@@ -146,6 +180,10 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
 /*
   When max fork number is reached and "splitsearch" is not yet finished thi function
   checks if <value> is present in <file> with a linear search.
+
+  Input:
+
+  Output:
 */
 int * linearsearch(char * file, int begin, int end, char * value, int * max) {
   char * buffer = malloc(sizeof(char));

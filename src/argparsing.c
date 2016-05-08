@@ -9,8 +9,15 @@
 /*
   Returns either if arg is a marker when <marker> parameter is NULL
   or if arg is equal tu a marker specified in parameter <marker>
+
+  Input:
+    - arg : i_th argument in user's input
+    - marker : marker to compare <arg> with. (Can be NULL)
+  Output:
+    - 0 : if one of arg is not in user's input
+    - 1 : if user's input is correct
 */
-int isMarker (char* arg, char* marker) {
+int isMarker (char * arg, char * marker) {
 
   char* simbols [] = {"-v", "-i", "-o", "-r"};    // Accepted Markers
   int res = 0;                                    // Return result
@@ -33,13 +40,18 @@ int isMarker (char* arg, char* marker) {
 /*
   Check if user's input has required default markers <-v> and <-i>
   Returns 1 if correct otherwise returns 0.
+
+  Input:
+    - args : vector with index of user's input's position in command line
+  Output:
+    - 0 : if
 */
   int hasdefaults(int * args) {
 
     // Defaults that must be present for prgram to work properly
     int res = 0;
 
-    if ( (args[0] != -1 && args[1] != -1){
+    if ( (args[0] != -1) && (args[1] != -1) ){
         res = 1;
     }
 
@@ -48,10 +60,15 @@ int isMarker (char* arg, char* marker) {
 
 /*
   Prints error message with helper <help> when input from command line is not correct
+
+  Input:
+    - none
+  Output:
+    - stdout : prints correct user's input
 */
 void exitonerror() {
   // Help message for correct usage
-  char help [] = "Usage ./executable -v [value_to_search]\n -i [input_file]\n (optional)\n -o [output_file]\n -r [number_occurrences]\n";
+  char help [] = "Usage:\t./[executable] -v [value_to_search] -i [input_file]\n(optional)\n \t-o [output_file]\n \t-r [number_occurrences]\n";
 
   printf("Wrong arguments\n%s",help);
   exit(1);
@@ -77,6 +94,13 @@ void exitonerror() {
 
   <-v> and <-i> must be present otherwise the function prints an error.
   "checkdefaults" verifies that at least <-v> and <-i> are specified
+
+  Input:
+    - argc : number of user's input
+    - argv : user's input
+  Output:
+    - exit : if wrong user's input
+    - args : index of user's argument for each marker accepted
 */
 int* argParser(int argc, char **argv){
 
