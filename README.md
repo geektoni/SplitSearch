@@ -6,7 +6,7 @@ L'eseguibile permette di effettuare una ricerca all'intero di un file per trovar
 
 ## Uso
 
-splitsearch -i <file_da_analizzare> -v <valore da cercare>
+splitsearch -i `<file_da_analizzare>`  -v `<valore da cercare>`
 
 E' possibile anche passare delle informazioni aggiuntive che possono essere:
 * -r <numero_di_risultati>: limita il numero di risultati;
@@ -17,10 +17,12 @@ Un esempio più complicato potrebbe essere:
 
 splitsearch -i assets/numeric_small -v 5 -r 10 -o output --verbose
 
-## Makefile
+### Makefile
 
 Abbiamo usato delle variabili per parametrizzare i parametri di compilazione:
 
+### Algorithm
+=======
 * _SRCDIR:_ contiene tutti i sorgenti del programma. Non si ipotizzano subdirectory;
 * _BUILDDIR:_ contiene gli object file e il binario compilato e linkato;
 * _OUTFILE:_ è il path del file binario compilato;
