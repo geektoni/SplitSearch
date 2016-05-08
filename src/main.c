@@ -88,6 +88,12 @@ int main(int argc, char * argv[]) {
 
   /**** BEGIN SEARCH SECTION ****/
 
+  /* Print some informations */
+  printf("[*] Splitsearch version 0.1\n");
+  printf("[*] Filename: %s\n", argv[arg[1]]);
+  printf("[*] Number of lines: %i\n", max);
+  printf("[*] Begin search of value %s:\n", argv[arg[0]]);
+
   /*
     Perform a search for the specific value and
     set the exit_value for this process
