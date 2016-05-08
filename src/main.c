@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
     }
     unlink("FIFO");
   } else {
-    printf("=");
+    if (args[4] == 1) printf("=");
   }
 
   /**** END SEARCH SECTION ***/
