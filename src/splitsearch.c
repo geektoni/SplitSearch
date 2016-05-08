@@ -140,12 +140,14 @@ int length(int fd) {
     - value: the value that we want to find.
     - pfd[]: the pipe were we will write how many occurence of the value
       we want to find.
+    - verbose_mode: if it has value 1, the the search will be performed
+      printing out some information about the execution. 
 
   Output:
     - The number of the line where we have found the value.
 
 */
-int * search(char * file, int begin, int end, char * value, int pfd[]) {
+int * search(char * file, int begin, int end, char * value, int pfd[], int verbose_mode) {
   int * status = malloc(sizeof(int)); *status = 0;
   int * max_value = malloc(sizeof(int));
 
@@ -158,6 +160,9 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
   int middle = (begin+end)/2;
   char * result = malloc(sizeof(char));
   if (begin == end) {
+    if (verbose_mode == 1) {
+      printf("[*] Analyzing line %i\n", begin+1);
+    }
     int fd = open(file, O_RDONLY);
     read_line(fd, result, begin);
     if (strcmp(result,value) == 0) {
@@ -168,7 +173,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
   } else if (begin < end) {
     int pid = fork();
     if (pid==0) {
-      status = search(file, begin, middle, value, pfd);
+      status = search(file, begin, middle, value, pfd, verbose_mode);
     } else if (pid==-1) {
       int * counter = malloc(sizeof(int));
       status = linearsearch(file, begin, end, value, counter);
@@ -178,7 +183,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[]) {
       int return_status = 0;
       waitpid(pid, &return_status, 0);
       updatepipe(pfd,max_value,false,0);
-      status = search(file, middle+1, end, value, pfd);
+      status = search(file, middle+1, end, value, pfd, verbose_mode);
     }
   }
   free(result);

@@ -88,11 +88,17 @@ int main(int argc, char * argv[]) {
 
   /**** BEGIN SEARCH SECTION ****/
 
+  /* Print some informations */
+  printf("[*] Splitsearch version 0.1\n");
+  printf("[*] Filename: %s\n", argv[arg[1]]);
+  printf("[*] Number of lines: %i\n", max);
+  printf("[*] Begin search of value %s:\n", argv[arg[0]]);
+
   /*
     Perform a search for the specific value and
     set the exit_value for this process
   */
-  line = search(argv[arg[1]], 1, max, argv[arg[0]], pfd);
+  line = search(argv[arg[1]], 0, max-1, argv[arg[0]], pfd, arg[4]);
 
   /* If we have found the value, write it inside FIFO */
   if (*line > 0) {
@@ -116,8 +122,6 @@ int main(int argc, char * argv[]) {
       printf("0 - Not found\n");
     }
     unlink("FIFO");
-  } else {
-    printf("=");
   }
 
   /**** END SEARCH SECTION ***/
