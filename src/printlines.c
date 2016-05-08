@@ -16,7 +16,7 @@
 */
 void printlines (int * buffer, FILE * out) {
   if (out == NULL) {
-    printf("\nValue fount in line: %i\n", *buffer);
+    printf("Value found in line: %i\n", *buffer);
   } else {
     char * buff = malloc(sizeof(char)*100);
     // Convert int buffer to char buffer
