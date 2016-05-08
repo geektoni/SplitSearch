@@ -98,7 +98,7 @@ int main(int argc, char * argv[]) {
     Perform a search for the specific value and
     set the exit_value for this process
   */
-  line = search(argv[arg[1]], 0, max, argv[arg[0]], pfd, arg[4]);
+  line = search(argv[arg[1]], 0, max-1, argv[arg[0]], pfd, arg[4]);
 
   /* If we have found the value, write it inside FIFO */
   if (*line > 0) {
@@ -122,8 +122,6 @@ int main(int argc, char * argv[]) {
       printf("0 - Not found\n");
     }
     unlink("FIFO");
-  } else {
-    printf("=");
   }
 
   /**** END SEARCH SECTION ***/

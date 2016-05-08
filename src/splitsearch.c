@@ -140,6 +140,8 @@ int length(int fd) {
     - value: the value that we want to find.
     - pfd[]: the pipe were we will write how many occurence of the value
       we want to find.
+    - verbose_mode: if it has value 1, the the search will be performed
+      printing out some information about the execution. 
 
   Output:
     - The number of the line where we have found the value.
@@ -159,7 +161,7 @@ int * search(char * file, int begin, int end, char * value, int pfd[], int verbo
   char * result = malloc(sizeof(char));
   if (begin == end) {
     if (verbose_mode == 1) {
-      printf("[*] Analyzing line %i", begin+1);
+      printf("[*] Analyzing line %i\n", begin+1);
     }
     int fd = open(file, O_RDONLY);
     read_line(fd, result, begin);
