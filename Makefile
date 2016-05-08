@@ -26,6 +26,20 @@ compile: $(OBJS)
 build: clean compile
 
 test:
+	@echo '================================='
+	@echo 'Test 1: found number'
+	@echo '================================='
+	./build/splitsearch -i assets/numeric_small -v 22
+
+	@echo '================================='
+	@echo 'Test 2: not found number'
+	@echo '================================='
+	./build/splitsearch -i assets/numeric_small -v 1000
+	
+	@echo '================================='
+	@echo 'Test 3: found string'
+	@echo '================================='
+	#./build/splitsearch -i assets/numeric_small -v 22
 
 clean:
 	rm -Rf build/*.o
